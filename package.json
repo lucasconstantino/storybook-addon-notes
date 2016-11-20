@@ -4,7 +4,7 @@
   "description": "Add a ruler much like Photoshop has to component preview.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kadirahq/storybook-addon-notes.git"
+    "url": "git+https://github.com/lucasconstantino/storybook-addon-ruler.git"
   },
   "license": "MIT",
   "scripts": {
@@ -18,34 +18,31 @@
     "publish-storybook": "bash .scripts/publish_storybook.sh"
   },
   "devDependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "@kadira/storybook": "^2.20.1",
+    "babel-cli": "^6.5.0",
     "babel-core": "^6.5.0",
+    "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.4",
+    "babel-plugin-transform-runtime": "^6.5.0",
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
-    "babel-plugin-transform-runtime": "^6.5.0",
-    "babel-cli": "^6.5.0",
-    "eslint": "^3.6.1",
-    "babel-eslint": "^7.0.0",
-    "eslint-config-airbnb": "^12.0.0",
-    "eslint-plugin-babel": "^3.2.0",
-    "eslint-plugin-react": "^6.2.2",
-    "mocha": "^3.1.0",
     "chai": "^3.5.0",
-    "sinon": "^1.17.6",
     "enzyme": "^2.2.0",
-    "react-addons-test-utils": "^15.3.2",
+    "eslint": "^3.6.1",
+    "eslint-config-taller": "^1.0.4",
+    "git-url-parse": "^6.0.1",
     "jsdom": "^8.3.1",
-    "eslint-plugin-jsx-a11y": "^0.6.2",
-    "@kadira/storybook": "^2.20.1",
-    "git-url-parse": "^6.0.1"
+    "mocha": "^3.1.0",
+    "react": "^15.3.2",
+    "react-addons-test-utils": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "sinon": "^1.17.6"
   },
   "peerDependencies": {
-    "react": "^0.14.7 || ^15.0.0",
-    "@kadira/storybook-addons": "^v1.3.1"
+    "@kadira/storybook-addons": "^v1.3.1",
+    "react": "^0.14.7 || ^15.0.0"
   },
   "dependencies": {
     "babel-runtime": "^6.5.0"
@@ -58,5 +55,10 @@
     "react",
     "storybook",
     "addon"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/lucasconstantino/storybook-addon-ruler/issues"
+  },
+  "homepage": "https://github.com/lucasconstantino/storybook-addon-ruler#readme",
+  "author": ""
 }
