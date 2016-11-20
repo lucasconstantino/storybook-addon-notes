@@ -12,7 +12,7 @@
     "prepublish": "npm run lint && npm run test && npm run compile",
     "lint": "eslint src",
     "lintfix": "eslint src --fix",
-    "test": "npm run testonly",
+    "test": "npm run lint",
     "test-watch": "npm run test -- --watch",
     "storybook": "start-storybook -p 9010"
   },
