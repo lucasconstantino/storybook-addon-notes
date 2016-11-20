@@ -8,14 +8,13 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublish": ". ./.scripts/prepublish.sh",
+    "compile": "babel --ignore tests,stories ./src --out-dir ./dist",
+    "prepublish": "npm run lint && npm run test && npm run compile",
     "lint": "eslint src",
     "lintfix": "eslint src --fix",
-    "testonly": "mocha --require .scripts/mocha_runner src/**/tests/**/*.js",
-    "test": "npm run lint && npm run testonly",
-    "test-watch": "npm run testonly -- --watch --watch-extensions js",
-    "storybook": "start-storybook -p 9010",
-    "publish-storybook": "bash .scripts/publish_storybook.sh"
+    "test": "npm run testonly",
+    "test-watch": "npm run test -- --watch",
+    "storybook": "start-storybook -p 9010"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.20.1",
@@ -54,7 +53,10 @@
   "keywords": [
     "react",
     "storybook",
-    "addon"
+    "addon",
+    "ruler",
+    "grid",
+    "canvas"
   ],
   "bugs": {
     "url": "https://github.com/lucasconstantino/storybook-addon-ruler/issues"
