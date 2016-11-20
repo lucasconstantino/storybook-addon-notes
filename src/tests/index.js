@@ -1,5 +1,5 @@
 const { describe, it } = global
 
-describe('Storybook Addon Notes', () => {
+describe('Storybook Addon Ruler', () => {
   it('should have some tests')
 })
