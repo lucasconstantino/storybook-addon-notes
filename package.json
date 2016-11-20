@@ -1,6 +1,6 @@
 {
   "name": "storybook-addon-ruler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add a ruler much like Photoshop has to component preview.",
   "repository": {
     "type": "git",

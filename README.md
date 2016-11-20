@@ -6,7 +6,7 @@ This [Storybook](https://getstorybook.io) addon creates a ruler based on [Rulers
 **note: addons require @kadira/storybook 2.x or greater*
 
 ```sh
-npm i --save @kadira/storybook-addon-ruler
+npm i --save storybook-addon-ruler
 ```
 
 Then create a file called `addons.js` in your storybook config.
