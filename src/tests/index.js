@@ -1,5 +1,5 @@
-const { describe, it } = global;
+const { describe, it } = global
 
 describe('Storybook Addon Notes', () => {
-  it('should have some tests');
-});
+  it('should have some tests')
+})

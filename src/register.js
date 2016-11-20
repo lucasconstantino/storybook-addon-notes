@@ -1,74 +1,108 @@
-import React from 'react';
-import addons from '@kadira/storybook-addons';
+import React, { Component, PropTypes } from 'react'
+import addons from '@kadira/storybook-addons'
 
 const styles = {
-  notesPanel: {
-    margin: 10,
+  container: {
+    display: 'table',
+    margin: '1em',
     fontFamily: 'Arial',
-    fontSize: 14,
     color: '#444',
-    width: '100%',
-    overflow: 'auto',
+    minWidth: 300,
   },
-};
+}
 
-export class Notes extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { text: '' };
-    this.onAddNotes = this.onAddNotes.bind(this);
+const stateDefaults = {
+  enabled: true,
+  menuPosition: 'top-left'
+}
+
+const nil = () => {}
+
+export class Ruler extends Component {
+  static propTypes = {
+    api: PropTypes.object,
+    channel: PropTypes.object,
   }
 
-  componentDidMount() {
-    const { channel, api } = this.props;
-    // Listen to the notes and render it.
-    channel.on('kadira/notes/add_notes', this.onAddNotes);
+  constructor (...args) {
+    super(...args)
 
-    // Clear the current notes on every story change.
-    this.stopListeningOnStory = api.onStory(() => {
-      this.onAddNotes('');
-    });
+    this.stopListeningOnStory = nil
+
+    this.state = stateDefaults
   }
 
-  // This is some cleanup tasks when the Notes panel is unmounting.
-  componentWillUnmount() {
-    if (this.stopListeningOnStory) {
-      this.stopListeningOnStory();
-    }
+  componentDidMount () {
+    const { channel, api } = this.props
 
-    this.unmounted = true;
-    const { channel } = this.props;
-    channel.removeListener('kadira/notes/add_notes', this.onAddNotes);
+    // channel.on('ruler/configure', this.configure)
+    channel.on('ruler/ready', () => channel.emit('ruler/configure', this.state))
+
+    // Reset the current config on every story change.
+    this.stopListeningOnStory = api.onStory(this.reset)
   }
 
-  onAddNotes(text) {
-    this.setState({ text });
+  // This is some cleanup tasks when the Ruler panel is unmounting.
+  componentWillUnmount () {
+    const { channel } = this.props
+
+    this.stopListeningOnStory()
+    channel.emit('ruler/configure', { ...this.state, enabled: false })
+    channel.removeListener('ruler/ready', this.configure)
   }
 
-  render() {
-    const { text } = this.state;
-    const textAfterFormatted = text ? text.trim().replace(/\n/g, '<br />') : '';
+  /**
+   * Reset the Ruler configuration to initial.
+   */
+  reset = () => this.configure(stateDefaults)
+
+  /**
+   * Configure Ruler.
+   * @TODO: talk to Ruler instance.
+   */
+  configure = config => {
+    this.setState(config)
+    this.props.channel.emit('ruler/configure', config)
+  }
+
+  configChange = (key, getValue) => e => this.configure({ ...this.state, [key]: getValue(e) })
+
+  render () {
+    const { enabled, menuPosition } = this.state
 
     return (
-      <div style={styles.notesPanel}>
-        <div dangerouslySetInnerHTML={{ __html: textAfterFormatted }} />
+      <div style={ styles.container }>
+        <div style={ { display: 'table-row' } }>
+          <label style={ { display: 'table-cell' } }>Enabled</label>
+          <input style={ { display: 'table-cell' } }
+            type='checkbox'
+            checked={ enabled }
+            onChange={ this.configChange('enabled', e => !enabled) }
+          />
+        </div>
+
+        <div style={ { display: 'table-row' } }>
+          <label style={ { display: 'table-cell' } }>Menu position</label>
+          <select style={ { display: 'table-cell' } }
+            value={ menuPosition }
+            onChange={ this.configChange('menuPosition', e => e.target.value) }
+          >
+            <option value='top-left'>Top-left</option>
+            <option value='top-right'>Top-right</option>
+            <option value='bottom-left'>Bottom-left</option>
+            <option value='bottom-right'>Bottom-right</option>
+          </select>
+        </div>
       </div>
-    );
+    )
   }
 }
 
-Notes.propTypes = {
-  channel: React.PropTypes.object,
-  api: React.PropTypes.object,
-};
-
-// Register the addon with a unique name.
-addons.register('kadira/notes', (api) => {
-  // Also need to set a unique name to the panel.
-  addons.addPanel('kadira/notes/panel', {
-    title: 'Notes',
+addons.register('ruler', api => {
+  addons.addPanel('ruler/panel', {
+    title: 'Ruler',
     render: () => (
-      <Notes channel={addons.getChannel()} api={api} />
+      <Ruler channel={ addons.getChannel() } api={ api } />
     ),
-  });
-});
+  })
+})

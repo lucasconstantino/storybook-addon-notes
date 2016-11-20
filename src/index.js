@@ -1,19 +1,50 @@
-import React from 'react';
-import addons from '@kadira/storybook-addons';
+import React from 'react'
+import addons from '@kadira/storybook-addons'
 
-export class WithNotes extends React.Component {
-  render() {
-    const { children, notes } = this.props;
-    const channel = addons.getChannel();
+import Ruler from 'ruler-guides'
 
-    // send the notes to the channel.
-    channel.emit('kadira/notes/add_notes', notes);
-    // return children elements.
-    return children;
-  }
+const sides = ['top', 'right', 'bottom', 'left']
+
+export const ruler = opt => Decorated => {
+  const channel = addons.getChannel()
+  const ruler = Ruler()
+
+  let body, root, menuButton, menu
+
+  // Register elements ruler is built.
+  setTimeout(() => {
+    body = document.body
+    root = document.querySelector('#root')
+    menu = document.querySelector('.rg-menu')
+    menuButton = document.querySelector('.menu-btn.unselectable')
+
+    // Initial DOM setup.
+    menu.style.listStyle = 'none'
+
+    channel.emit('ruler/ready')
+  }, 15)
+
+  channel.on('ruler/configure', ({ enabled, menuPosition }) => {
+    // Update Ruler status.
+    ruler[enabled ? 'enable' : 'disable']()
+
+    body.style.background = enabled ? '#CCCCCC' : ''
+    body.style.height = enabled ? '100vh' : ''
+    root.style.background = enabled ? 'white' : ''
+    root.style.position = enabled ? 'fixed' : ''
+    root.style.top = enabled ? '32px' : ''
+    root.style.left = enabled ? '42px' : ''
+    root.style.right = enabled ? 0 : ''
+    root.style.bottom = enabled ? 0 : ''
+    // root.style.padding:
+    root.style.transform = enabled ? 'translate3d(0, 0, 0)' : ''
+
+    // Update menu position.
+    sides.forEach(side => {
+      menu.style[side] = menuPosition.includes(side) ? '20px' : 'auto'
+      menuButton.style[side] = menuPosition.includes(side) ? '5px' : 'auto'
+    })
+  })
+
+  return <Decorated />
 }
-
-WithNotes.propTypes = {
-  children: React.PropTypes.node,
-  notes: React.PropTypes.string,
-};
